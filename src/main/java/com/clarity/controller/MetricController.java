@@ -1,7 +1,9 @@
 package com.clarity.controller;
 
+import com.clarity.exception.EntityNotFoundException;
 import com.clarity.model.Metric;
 import com.clarity.model.MetricSummary;
+import com.clarity.model.dto.MetricDTO;
 import com.clarity.service.MetricService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,14 +30,14 @@ public class MetricController extends ExceptionController
     }
 
     @GetMapping("/metrics/{id}")
-    public ResponseEntity<Metric> getMetric(@PathVariable Long id)
+    public ResponseEntity<Metric> getMetric(@PathVariable Long id) throws EntityNotFoundException
     {
         Metric metric = metricService.getMetricById(id);
         return new ResponseEntity<>(metric, HttpStatus.OK);
     }
 
     @PostMapping("/metrics")
-    public ResponseEntity<Metric> createMetric(@RequestBody Metric metric)
+    public ResponseEntity<Metric> createMetric(@RequestBody MetricDTO metric)
     {
         Metric createdMetric = metricService.createMetric(metric);
         return new ResponseEntity<>(createdMetric, HttpStatus.CREATED);
@@ -43,7 +45,7 @@ public class MetricController extends ExceptionController
 
     @PutMapping("/metrics/{id}")
     public ResponseEntity<Metric> updateMetric(@PathVariable Long id,
-                                               @RequestBody Metric metric)
+                                               @RequestBody MetricDTO metric) throws EntityNotFoundException
     {
         Metric updatedMetric = metricService.updateMetric(id, metric);
         return new ResponseEntity<>(updatedMetric, HttpStatus.OK);

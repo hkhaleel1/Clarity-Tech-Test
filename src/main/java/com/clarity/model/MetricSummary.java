@@ -1,13 +1,13 @@
 package com.clarity.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class MetricSummary
 {
     private String system;

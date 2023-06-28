@@ -1,4 +1,4 @@
-package com.clarity.controller.utils;
+package com.clarity.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,8 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 
 import java.util.List;
 
-public class ResponseMapper<T> {
+public class ResponseMapper<T>
+{
     private final ObjectMapper mapper = new ObjectMapper();
 
     public T deserialize(final String response, final Class<T> valueType) throws JsonProcessingException

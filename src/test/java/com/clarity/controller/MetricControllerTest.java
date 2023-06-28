@@ -1,10 +1,11 @@
 package com.clarity.controller;
 
-import com.clarity.controller.utils.ResponseMapper;
 import com.clarity.exception.EntityNotFoundException;
 import com.clarity.model.Metric;
 import com.clarity.model.MetricSummary;
+import com.clarity.model.dto.MetricDTO;
 import com.clarity.service.MetricService;
+import com.clarity.utils.ResponseMapper;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,13 @@ class MetricControllerTest
             // THEN
             MvcResult mvcResult = action.andExpect(status().isOk()).andReturn();
             List<Metric> response = MAPPER.deserializeList(mvcResult.getResponse().getContentAsString(), Metric.class);
-            assertEquals(metrics, response);
+            assertEquals(1, response.size());
+            Metric responseMetric = response.get(0);
+            assertEquals(METRIC.getId(), responseMetric.getId());
+            assertEquals(METRIC.getSystem(), responseMetric.getSystem());
+            assertEquals(METRIC.getName(), responseMetric.getName());
+            assertEquals(METRIC.getDate(), responseMetric.getDate());
+            assertEquals(METRIC.getValue(), responseMetric.getValue());
         }
 
         @Test
@@ -91,7 +98,11 @@ class MetricControllerTest
             // THEN
             MvcResult mvcResult = action.andExpect(status().isOk()).andReturn();
             Metric response = MAPPER.deserialize(mvcResult.getResponse().getContentAsString(), Metric.class);
-            assertEquals(METRIC, response);
+            assertEquals(METRIC.getId(), response.getId());
+            assertEquals(METRIC.getSystem(), response.getSystem());
+            assertEquals(METRIC.getName(), response.getName());
+            assertEquals(METRIC.getDate(), response.getDate());
+            assertEquals(METRIC.getValue(), response.getValue());
         }
 
         // Cannot Test for null so have tested for whitespace which is converted to null
@@ -148,7 +159,7 @@ class MetricControllerTest
         void returns201_whenMetricCreated() throws Exception
         {
             // WITH
-            when(metricService.createMetric(any(Metric.class))).thenReturn(NEW_METRIC);
+            when(metricService.createMetric(any(MetricDTO.class))).thenReturn(NEW_METRIC);
             // WHEN
             ResultActions action = mockMvc.perform(MockMvcRequestBuilders
                     .post("/metrics")
@@ -157,7 +168,11 @@ class MetricControllerTest
             // THEN
             MvcResult mvcResult = action.andExpect(status().isCreated()).andReturn();
             Metric response = MAPPER.deserialize(mvcResult.getResponse().getContentAsString(), Metric.class);
-            assertEquals(NEW_METRIC, response);
+            assertEquals(NEW_METRIC.getId(), response.getId());
+            assertEquals(NEW_METRIC.getSystem(), response.getSystem());
+            assertEquals(NEW_METRIC.getName(), response.getName());
+            assertEquals(NEW_METRIC.getDate(), response.getDate());
+            assertEquals(NEW_METRIC.getValue(), response.getValue());
         }
 
         @Test
@@ -165,7 +180,7 @@ class MetricControllerTest
         {
             // WITH
             final String expectedMessage = "expected message";
-            when(metricService.createMetric(any(Metric.class))).thenAnswer((e) -> {throw new IllegalArgumentException(expectedMessage);});
+            when(metricService.createMetric(any(MetricDTO.class))).thenAnswer((e) -> {throw new IllegalArgumentException(expectedMessage);});
             // WHEN
             ResultActions action = mockMvc.perform(MockMvcRequestBuilders
                     .post("/metrics")
@@ -181,20 +196,31 @@ class MetricControllerTest
     class TestUpdateMetric
     {
         private static final Metric UPDATED_METRIC = new Metric(1L, "system", "name", 1, 1);
+
         @Test
         void returns200_whenMetricCreated() throws Exception
         {
             // WITH
-            when(metricService.updateMetric(anyLong(), any(Metric.class))).thenReturn(UPDATED_METRIC);
+            MetricDTO dto = MetricDTO.builder()
+                    .system(UPDATED_METRIC.getSystem())
+                    .name(UPDATED_METRIC.getName())
+                    .date(UPDATED_METRIC.getDate())
+                    .value(UPDATED_METRIC.getValue())
+                    .build();
+            when(metricService.updateMetric(anyLong(), any(MetricDTO.class))).thenReturn(UPDATED_METRIC);
             // WHEN
             ResultActions action = mockMvc.perform(MockMvcRequestBuilders
                     .put("/metrics/" + UPDATED_METRIC.getId())
-                    .content(MAPPER.asJsonString(UPDATED_METRIC))
+                    .content(MAPPER.asJsonString(dto))
                     .contentType(MediaType.APPLICATION_JSON));
             // THEN
             MvcResult mvcResult = action.andExpect(status().isOk()).andReturn();
             Metric response = MAPPER.deserialize(mvcResult.getResponse().getContentAsString(), Metric.class);
-            assertEquals(UPDATED_METRIC, response);
+            assertEquals(UPDATED_METRIC.getId(), response.getId());
+            assertEquals(UPDATED_METRIC.getSystem(), response.getSystem());
+            assertEquals(UPDATED_METRIC.getName(), response.getName());
+            assertEquals(UPDATED_METRIC.getDate(), response.getDate());
+            assertEquals(UPDATED_METRIC.getValue(), response.getValue());
         }
 
 
@@ -203,7 +229,7 @@ class MetricControllerTest
         {
             // WITH
             final String expectedMessage = "expected message";
-            when(metricService.updateMetric(anyLong(), any(Metric.class))).thenAnswer((e) -> {throw new IllegalArgumentException(expectedMessage);});
+            when(metricService.updateMetric(anyLong(), any(MetricDTO.class))).thenAnswer((e) -> {throw new IllegalArgumentException(expectedMessage);});
             // WHEN
             ResultActions action = mockMvc.perform(MockMvcRequestBuilders
                     .put("/metrics/" + UPDATED_METRIC.getId())
@@ -219,7 +245,7 @@ class MetricControllerTest
         {
             // WITH
             final String expectedMessage = "expected message";
-            when(metricService.updateMetric(anyLong(), any(Metric.class))).thenAnswer((e) -> {throw new EntityNotFoundException(expectedMessage);});
+            when(metricService.updateMetric(anyLong(), any(MetricDTO.class))).thenAnswer((e) -> {throw new EntityNotFoundException(expectedMessage);});
             // WHEN
             ResultActions action = mockMvc.perform(MockMvcRequestBuilders
                     .put("/metrics/" + UPDATED_METRIC.getId())

@@ -1,4 +1,4 @@
-package com.clarity.model;
+package com.clarity.model.dto;
 
 import lombok.*;
 
@@ -7,12 +7,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Metric
+public class MetricDTO
 {
-    private Long id;
     private String system;
     private String name;
-    private int date;
-    @Setter
-    private int value;
+    private Integer date;
+    private Integer value;
 }
