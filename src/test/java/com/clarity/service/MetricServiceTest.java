@@ -172,7 +172,7 @@ class MetricServiceTest
                     .value(newVal)
                     .build();
             when(repo.getMetricById(eq(METRIC.getId()))).thenReturn(METRIC);
-            when(repo.save(any(Metric.class))).then(returnsFirstArg());
+            when(repo.persist(any(Metric.class))).then(returnsFirstArg());
             // WHEN
             final Metric result = service.updateMetric(METRIC.getId(), DTO);
             // THEN
@@ -193,7 +193,7 @@ class MetricServiceTest
                     .value(null)
                     .build();
             when(repo.getMetricById(eq(METRIC.getId()))).thenReturn(METRIC);
-            when(repo.save(any(Metric.class))).then(returnsFirstArg());
+            when(repo.persist(any(Metric.class))).then(returnsFirstArg());
             // WHEN
             final Metric result = service.updateMetric(METRIC.getId(), DTO);
             // THEN

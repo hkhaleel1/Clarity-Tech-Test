@@ -12,7 +12,7 @@ public class MetricSummary
 {
     private String system;
     private String name;
-    private int from;
-    private int to;
+    private Integer from;
+    private Integer to;
     private int value;
 }

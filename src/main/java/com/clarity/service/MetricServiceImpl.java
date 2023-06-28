@@ -74,7 +74,7 @@ public class MetricServiceImpl implements MetricService
                     + updatedMetric.getName());
         int newValue = updatedMetric.getValue() == null ? metric.getValue() + 1 :  updatedMetric.getValue();
         metric.setValue(newValue);
-        return repo.save(metric);
+        return repo.persist(metric);
     }
 
     @Override

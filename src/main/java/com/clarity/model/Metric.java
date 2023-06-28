@@ -9,6 +9,7 @@ import lombok.*;
 @ToString
 public class Metric
 {
+    @Setter
     private Long id;
     private String system;
     private String name;

@@ -13,7 +13,7 @@ public interface MetricRepository
 
     Metric createMetric(Metric metric);
 
-    Metric save(Metric metric);
+    Metric persist(Metric metric);
 
     MetricSummary getMetricSummary(String system, String name, Integer from, Integer to);
 }

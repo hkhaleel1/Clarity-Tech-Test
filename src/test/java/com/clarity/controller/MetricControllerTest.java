@@ -279,7 +279,11 @@ class MetricControllerTest
             // THEN
             MvcResult mvcResult = action.andExpect(status().isOk()).andReturn();
             MetricSummary response = SUMMARY_MAPPER.deserialize(mvcResult.getResponse().getContentAsString(), MetricSummary.class);
-            assertEquals(SUMMARY, response);
+            assertEquals(SUMMARY.getSystem(), response.getSystem());
+            assertEquals(SUMMARY.getName(), response.getName());
+            assertEquals(SUMMARY.getTo(), response.getTo());
+            assertEquals(SUMMARY.getFrom(), response.getFrom());
+            assertEquals(SUMMARY.getValue(), response.getValue());
         }
 
         @Test
