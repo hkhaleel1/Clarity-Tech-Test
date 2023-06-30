@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
-public class MetricInMemoryRepository implements MetricRepository
+public class MetricRepositoryInMemoryImpl implements MetricRepository
 {
     private final Map<Long, Metric> metricMap = new HashMap<>();
     private Long nextId = 1L;
